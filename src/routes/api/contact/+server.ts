@@ -1,6 +1,6 @@
 import { json } from '@sveltejs/kit';
 import { Resend } from 'resend';
-import { RESEND_API_KEY, CONTACT_TO_EMAIL } from '$env/static/private';
+import { RESEND_API_KEY, CONTACT_FROM, CONTACT_TO } from '$env/static/private';
 
 const resend = new Resend(RESEND_API_KEY);
 
@@ -30,8 +30,8 @@ export async function POST({ request }) {
 		}
 
 		await resend.emails.send({
-			from: 'KinderBAND Contact <onboarding@resend.dev>',
-			to: CONTACT_TO_EMAIL,
+			from: CONTACT_FROM,
+			to: CONTACT_TO,
 			replyTo: email,
 			subject: `KinderBAND Contact Form - ${name}`,
 			html: `

@@ -2,14 +2,14 @@
 	import Navbar from '$lib/components/Navbar.svelte';
 	import Footer from '$lib/components/Footer.svelte';
 
-	let name = '';
-	let phone = '';
-	let email = '';
-	let message = '';
+	let name = $state('');
+	let phone = $state('');
+	let email = $state('');
+	let message = $state('');
 
-	let sending = false;
-	let statusMessage = '';
-	let statusType: 'success' | 'error' | '' = '';
+	let sending = $state(false);
+	let statusMessage = $state('');
+	let statusType = $state<'success' | 'error' | ''>('');
 
 	async function submitContact() {
 		statusMessage = '';
