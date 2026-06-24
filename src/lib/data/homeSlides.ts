@@ -20,15 +20,15 @@ export const homeSlides: HomeSlide[] = [
 		title: 'kinderBAND™',
 		text: 'Custom-made cranial remolding helmet prescribed for plagiocephaly. It is also referred to as a cranial helmet, cranial band or helmet therapy.',
 		button: 'Learn More',
-		href: '/',
+		href: '/about',
 		image: '/images/kinderband-slide-1.jpg',
 		position: 'right'
 	},
 	{
-		title: 'Available in 19 States',
-		text: 'kinderBAND™ is available in 19 states. Certified kinderBAND™ clinics are opening monthly. For the newest clinics, please call 877.246.2884.',
+		title: 'Available in 9 States',
+		text: 'kinderBAND™ is available in 9 states including Puerto Rico.',
 		button: 'Learn More',
-		href: '/',
+		href: '/clinics',
 		image: '/images/kinderband-slide-2.jpg',
 		position: 'left'
 	}

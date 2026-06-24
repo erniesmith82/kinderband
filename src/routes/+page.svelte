@@ -96,13 +96,13 @@
 	<title>kinderBAND™</title>
 </svelte:head>
 
-<div class="min-h-screen bg-white text-slate-800 pt-[90px] md:pt-[100px]">
+<div class="min-h-screen bg-white pt-[90px] text-slate-800 md:pt-[100px]">
 	<Navbar />
 
 	<main>
 		<!-- HERO -->
-		<section
-	class="relative min-h-[700px] overflow-hidden"
+<section
+	class="relative overflow-hidden"
 	style="
 		background-image: url('/images/kinderband-bg.jpg');
 		background-size: 100%;
@@ -110,9 +110,32 @@
 		background-repeat: no-repeat;
 	"
 >
-	<div class="mx-auto max-w-[1500px] px-2 py-12 lg:py-20">
+	<div class="mx-auto max-w-[1500px] px-4 py-8 sm:px-2 sm:py-12 lg:py-20">
 		<div class="mx-auto max-w-[1185px]">
-			<div class="overflow-hidden rounded-[4px] bg-white shadow-lg">
+			<!-- MOBILE HERO -->
+			<div class="rounded-[4px] bg-white px-8 py-10 shadow-lg sm:hidden">
+				{#key currentSlide}
+					<div>
+						<h1 class="text-[40px] font-light leading-tight text-slate-900">
+							{activeSlide.title}
+						</h1>
+
+						<p class="mt-5 text-[15px] leading-7 text-slate-800">
+							{activeSlide.text}
+						</p>
+
+						<a
+							href={activeSlide.href}
+							class="mt-6 inline-block bg-[#446d2e] px-6 py-3 text-sm font-bold uppercase text-white"
+						>
+							{activeSlide.button}
+						</a>
+					</div>
+				{/key}
+			</div>
+
+			<!-- DESKTOP HERO -->
+			<div class="hidden overflow-hidden rounded-[4px] bg-white shadow-lg sm:block">
 				<div
 					class="relative min-h-[500px] bg-cover bg-center"
 					style={`background-image: url('${activeSlide.image}');`}
@@ -150,17 +173,17 @@
 </section>
 
 		<!-- HEADING -->
-		<section class="bg-white py-12 text-center">
-			<h2 class="mx-auto max-w-4xl text-[42px] text-[#4a4f57]">
+		<section class="bg-white px-4 py-10 text-center sm:py-12">
+			<h2 class="mx-auto max-w-4xl text-[30px] leading-tight text-[#4a4f57] sm:text-[36px] lg:text-[42px]">
 				Combining the most advanced technology with over 80 years of clinical expertise.
 			</h2>
 		</section>
 
 		<!-- CARDS -->
-		<section bind:this={servicesSection} class="bg-[#f3f6fb] py-16">
-			<div class="mx-auto grid max-w-[1210px] grid-cols-4 gap-6 px-4">
+		<section bind:this={servicesSection} class="bg-[#f3f6fb] py-12 sm:py-16">
+			<div class="mx-auto grid max-w-[1210px] grid-cols-1 gap-6 px-4 sm:grid-cols-2 lg:grid-cols-4">
 				{#each serviceCards as card, index (card.title)}
-					<a href={card.href} class="group relative h-[320px] overflow-hidden rounded">
+					<a href={card.href} class="group relative h-[300px] overflow-hidden rounded sm:h-[320px]">
 						{#if servicesVisible}
 							<div
 								class="absolute inset-0"
@@ -186,7 +209,7 @@
 									}`}
 								></div>
 
-								<div class="absolute bottom-6 left-6 text-white">
+								<div class="absolute bottom-6 left-6 right-6 text-white">
 									<h3 class="text-xl font-semibold">{card.title}</h3>
 
 									<div class="max-h-0 opacity-0 transition-all group-hover:max-h-40 group-hover:opacity-100">
@@ -204,9 +227,9 @@
 
 		<!-- PERFECT NOGGINS -->
 		<section class="bg-[#f3f6fb] pb-0">
-			<div class="mx-auto grid max-w-[1210px] grid-cols-2 items-end px-4 py-12">
+			<div class="mx-auto grid max-w-[1210px] grid-cols-1 items-end gap-8 px-4 py-10 sm:py-12 md:grid-cols-2">
 				<div>
-					<h3 class="text-[32px] font-light text-[#2b9444]">
+					<h3 class="text-[30px] font-light text-[#2b9444] sm:text-[32px]">
 						Perfect Lil’ Noggins
 					</h3>
 
@@ -220,54 +243,54 @@
 					</a>
 				</div>
 
-				<div class="flex justify-end">
+				<div class="flex justify-center md:justify-end">
 					<img
 						src="/images/baby-header-1.png"
 						alt="KinderBAND children"
-						class="max-w-[320px]"
+						class="w-full max-w-[280px] sm:max-w-[320px]"
 					/>
 				</div>
 			</div>
 
 			<!-- YELLOW BAR + TOP MENU + TURTLE -->
 			<div
-				class="relative h-[84px] border-t"
+				class="relative border-t py-4 sm:h-[84px] sm:py-0"
 				style="
 					background-image: url('/images/footer-top-bg.jpg');
 					background-repeat: repeat-x;
 					background-size: auto 100%;
 				"
 			>
-				<div class="relative mx-auto flex h-full max-w-[1210px] items-center justify-end px-4">
-					<div class="relative h-full w-full overflow-visible">
+				<div class="relative mx-auto flex max-w-[1210px] items-center justify-center px-4 sm:h-full sm:justify-end">
+					<div class="relative w-full overflow-visible sm:h-full">
 						<img
 							src="/images/kinderband-turtle.png"
-							class="absolute -top-6 left-0 z-10 w-[130px] animate-turtle"
+							class="absolute -top-6 left-0 z-10 hidden w-[130px] animate-turtle sm:block"
 							alt="turtle"
 						/>
 
-						<div class="absolute right-0 top-1/2 z-20 flex -translate-y-1/2 items-center gap-3">
-							<div class="relative">
-								<select
-									bind:value={language}
-									onchange={handleLanguageChange}
-									aria-label="Language translator"
-									class="h-[38px] rounded-[10px] border border-[#d4c16b] bg-[#f7efb0] px-4 pr-9 text-[14px] font-medium text-[#4d8b38] shadow-sm outline-none transition hover:bg-[#fbf4c2]"
-								>
-									{#each languageOptions as option (option.label)}
-										<option value={option.value}>{option.label}</option>
-									{/each}
-								</select>
-							</div>
+						<div class="relative z-20 flex flex-col items-center justify-center gap-2 sm:absolute sm:right-0 sm:top-1/2 sm:-translate-y-1/2 sm:flex-row sm:gap-3">
+							<select
+								bind:value={language}
+								onchange={handleLanguageChange}
+								aria-label="Language translator"
+								class="h-[34px] w-full max-w-[220px] rounded-[8px] border border-[#d4c16b] bg-[#f7efb0] px-3 text-[13px] font-medium text-[#4d8b38] shadow-sm outline-none transition hover:bg-[#fbf4c2] sm:h-[38px] sm:w-auto sm:max-w-none sm:px-4"
+							>
+								{#each languageOptions as option (option.label)}
+									<option value={option.value}>{option.label}</option>
+								{/each}
+							</select>
 
-							{#each footerTopLinks as item (item.label)}
-								<a
-									href={item.href}
-									class="inline-flex h-[38px] items-center rounded-[10px] border border-[#d4c16b] bg-[#f7efb0] px-4 text-[14px] font-medium text-[#4d8b38] shadow-sm transition hover:bg-[#fbf4c2]"
-								>
-									{item.label}
-								</a>
-							{/each}
+							<div class="flex flex-wrap justify-center gap-2 sm:gap-3">
+								{#each footerTopLinks as item (item.label)}
+									<a
+										href={item.href}
+										class="inline-flex h-[34px] items-center rounded-[8px] border border-[#d4c16b] bg-[#f7efb0] px-3 text-[13px] font-medium text-[#4d8b38] shadow-sm transition hover:bg-[#fbf4c2] sm:h-[38px] sm:rounded-[10px] sm:px-4 sm:text-[14px]"
+									>
+										{item.label}
+									</a>
+								{/each}
+							</div>
 						</div>
 					</div>
 				</div>
