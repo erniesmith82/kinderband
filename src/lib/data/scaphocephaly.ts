@@ -37,7 +37,7 @@ export const scaphocephalyPageData: InfoPageData = {
 			label: 'Symptoms',
 			icon: '◔',
 			title: 'Scaphocephaly Symptoms',
-			image: '/images/scaphocephaly-symptoms.jpg',
+			image: '/images/scaphocephaly01.jpg',
 			imageAlt: 'Scaphocephaly head shape comparison',
 			blocks: [
 				{
@@ -59,7 +59,7 @@ export const scaphocephalyPageData: InfoPageData = {
 			label: 'Causes',
 			icon: '⚕',
 			title: 'Scaphocephaly Causes',
-			image: '/images/scaphocephaly-causes.jpg',
+			image: '/images/scaphocephaly01.jpg',
 			imageAlt: 'Infant in NICU positioning support',
 			blocks: [
 				{
@@ -95,7 +95,7 @@ export const scaphocephalyPageData: InfoPageData = {
 			label: 'Treatment',
 			icon: '⌕',
 			title: 'Scaphocephaly Treatment',
-			image: '/images/scaphocephaly-treatment.jpg',
+			image: '/images/scaphocephaly01.jpg',
 			imageAlt: 'Infant receiving head-shape treatment',
 			blocks: [
 				{

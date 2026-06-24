@@ -26,7 +26,6 @@
 
 			<!-- RIGHT CONTACT -->
 			<div class="flex flex-col items-center text-sm leading-7 text-slate-600">
-				<div><span class="font-semibold">Toll-free:</span> 877-246-2884</div>
 				<div><span class="font-semibold">Phone:</span> 305-823-8300</div>
 				<div><span class="font-semibold">Fax:</span> 305-823-8304</div>
 				<div><span class="font-semibold">Email:</span> info@kinderband.net</div>

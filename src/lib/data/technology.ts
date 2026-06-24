@@ -65,15 +65,15 @@ export const technologyPageData: InfoPageData = {
 			title: 'Scanning Process',
 			images: [
 				{
-					src: '/images/technology-step-1.jpg',
+					src: '/images/technology02.jpg',
 					alt: 'Scanning hood'
 				},
 				{
-					src: '/images/technology-step-2.jpg',
+					src: '/images/technology03.jpg',
 					alt: 'Transmitter placement'
 				},
 				{
-					src: '/images/technology-step-3.jpg',
+					src: '/images/scanning03.jpg',
 					alt: 'Scanning process'
 				}
 			],
@@ -105,22 +105,6 @@ export const technologyPageData: InfoPageData = {
 				{
 					type: 'paragraph',
 					text: 'FDA approved technology.'
-				}
-			]
-		},
-		{
-			id: 'available-patterns',
-			label: 'Available Patterns',
-			icon: '▦',
-			title: 'Available Patterns',
-			blocks: [
-				{
-					type: 'paragraph',
-					text: 'KinderBAND™ offers a variety of available patterns and colors, allowing families to choose a look that feels personal while maintaining the same clinical quality and performance.'
-				},
-				{
-					type: 'gallery',
-					items: []
 				}
 			]
 		}

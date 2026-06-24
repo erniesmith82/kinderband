@@ -22,35 +22,22 @@
 	};
 
 	export type ContentBlock =
+		| { type: 'paragraph'; text: string }
+		| { type: 'link'; label: string; href: string }
+		| { type: 'faq'; items: { question: string; answer: string }[] }
+		| { type: 'list'; title?: string; ordered?: boolean; items: string[] }
+		| { type: 'steps'; title?: string; items: string[] }
+		| { type: 'note'; text: string }
+		| { type: 'table'; title?: string; headers: string[]; rows: string[][] }
 		| {
-				type: 'paragraph';
-				text: string;
-		  }
-		| {
-				type: 'link';
-				label: string;
-				href: string;
-		  }
-		| {
-				type: 'faq';
+				type: 'buttons';
+				title?: string;
 				items: {
-					question: string;
-					answer: string;
+					label: string;
+					href: string;
+					variant?: 'outline' | 'filled';
+					target?: string;
 				}[];
-		  }
-		| {
-				type: 'list';
-				title?: string;
-				items: string[];
-		  }
-		| {
-				type: 'steps';
-				title?: string;
-				items: string[];
-		  }
-		| {
-				type: 'note';
-				text: string;
 		  }
 		| {
 				type: 'gallery';
@@ -105,51 +92,25 @@
 	let activeTab = $state(data.tabs[0]?.id ?? '');
 	let selectedDesignImage = $state<string | null>(null);
 	let designsModalOpen = $state(false);
-	let clinicSearch = $state('');
+	let selectedClinicRegionSlug = $state('');
 	let openFaq = $state<string | null>(null);
 
-	const activeContent = $derived(
-		data.tabs.find((tab) => tab.id === activeTab) ?? data.tabs[0]
-	);
+	const activeContent = $derived(data.tabs.find((tab) => tab.id === activeTab) ?? data.tabs[0]);
 
-	const activeClinicSearchBlock = $derived(
+	const activeClinicBlock = $derived(
 		activeContent.blocks.find((block) => block.type === 'clinic_search')
 	);
 
-	const filteredClinicRegions = $derived.by(() => {
-		if (!activeClinicSearchBlock || activeClinicSearchBlock.type !== 'clinic_search') return [];
-		if (!clinicSearch.trim()) return [];
+	const selectedClinicRegion = $derived.by(() => {
+		if (!activeClinicBlock || activeClinicBlock.type !== 'clinic_search') return null;
+		if (!selectedClinicRegionSlug) return null;
 
-		const query = clinicSearch.trim().toLowerCase();
-
-		return activeClinicSearchBlock.regions.filter((region) => {
-			const regionMatch = region.region.toLowerCase().includes(query);
-
-			const clinicMatch = region.clinics.some((clinic) => {
-				const haystack = [
-					region.region,
-					clinic.name,
-					clinic.city,
-					...(clinic.addressLines ?? []),
-					...(clinic.phones ?? []),
-					clinic.email ?? '',
-					clinic.website ?? '',
-					clinic.contact ?? '',
-					clinic.country ?? ''
-				]
-					.join(' ')
-					.toLowerCase();
-
-				return haystack.includes(query);
-			});
-
-			return regionMatch || clinicMatch;
-		});
+		return activeClinicBlock.regions.find((region) => region.slug === selectedClinicRegionSlug) ?? null;
 	});
 
 	function selectTab(tabId: string) {
 		activeTab = tabId;
-		clinicSearch = '';
+		selectedClinicRegionSlug = '';
 		openFaq = null;
 	}
 
@@ -210,6 +171,7 @@
 										{#if tab.icon}
 											<span class="text-[22px] leading-none sm:text-[24px]">{tab.icon}</span>
 										{/if}
+
 										<span class="text-[15px] font-medium leading-6 sm:text-[16px]">
 											{tab.label}
 										</span>
@@ -217,7 +179,13 @@
 								{/each}
 							</div>
 
-							<div class={`grid grid-cols-1 gap-8 ${activeContent.image || activeContent.images ? 'lg:grid-cols-[minmax(0,1fr)_260px] lg:gap-8 xl:grid-cols-[minmax(0,1fr)_300px] xl:gap-10' : ''}`}>
+							<div
+								class={`grid grid-cols-1 gap-8 ${
+									activeContent.id !== 'tummy-time' && (activeContent.image || activeContent.images)
+										? 'lg:grid-cols-[minmax(0,1fr)_260px] lg:gap-8 xl:grid-cols-[minmax(0,1fr)_300px] xl:gap-10'
+										: ''
+								}`}
+							>
 								<div class="pb-2">
 									<h1 class="text-[40px] font-light leading-[1.02] tracking-[-0.02em] text-slate-900 sm:text-[48px] lg:text-[60px] xl:text-[66px]">
 										{activeContent.title}
@@ -227,6 +195,16 @@
 										{#each activeContent.blocks as block, i (`${activeContent.id}-block-${i}`)}
 											{#if block.type === 'paragraph'}
 												<p>{block.text}</p>
+
+												{#if activeContent.id === 'tummy-time' && activeContent.image}
+													<div class="mt-8 flex justify-center">
+														<img
+															src={activeContent.image}
+															alt={activeContent.imageAlt ?? activeContent.title}
+															class="w-full max-w-[520px] rounded-lg object-contain"
+														/>
+													</div>
+												{/if}
 
 											{:else if block.type === 'link'}
 												<a
@@ -278,11 +256,19 @@
 														</h2>
 													{/if}
 
-													<ul class="space-y-2 pl-5 sm:space-y-3 sm:pl-6">
-														{#each block.items as item, j (`${activeContent.id}-list-${i}-${j}`)}
-															<li class="list-disc">{item}</li>
-														{/each}
-													</ul>
+													{#if block.ordered}
+														<ol class="space-y-2 pl-5 sm:space-y-3 sm:pl-6">
+															{#each block.items as item, j (`${activeContent.id}-list-${i}-${j}`)}
+																<li class="list-decimal">{item}</li>
+															{/each}
+														</ol>
+													{:else}
+														<ul class="space-y-2 pl-5 sm:space-y-3 sm:pl-6">
+															{#each block.items as item, j (`${activeContent.id}-list-${i}-${j}`)}
+																<li class="list-disc">{item}</li>
+															{/each}
+														</ul>
+													{/if}
 												</div>
 
 											{:else if block.type === 'steps'}
@@ -299,6 +285,65 @@
 																<span class="font-semibold">Step {j + 1}</span>
 																<span class="ml-2">{step}</span>
 															</p>
+														{/each}
+													</div>
+												</div>
+
+											{:else if block.type === 'table'}
+												<div class="overflow-x-auto">
+													{#if block.title}
+														<h2 class="mb-4 text-[18px] font-semibold text-slate-800">
+															{block.title}
+														</h2>
+													{/if}
+
+													<table class="w-full min-w-[720px] border-collapse bg-white shadow-sm">
+														<thead>
+															<tr>
+																{#each block.headers as header}
+																	<th class="border border-slate-200 bg-slate-50 px-4 py-4 text-left font-semibold text-slate-800">
+																		{header}
+																	</th>
+																{/each}
+															</tr>
+														</thead>
+
+														<tbody>
+															{#each block.rows as row}
+																<tr>
+																	{#each row as cell}
+																		<td class="border border-slate-200 px-4 py-4 text-slate-700">
+																			{cell}
+																		</td>
+																	{/each}
+																</tr>
+															{/each}
+														</tbody>
+													</table>
+												</div>
+
+											{:else if block.type === 'buttons'}
+												<div class="space-y-4">
+													{#if block.title}
+														<h2 class="text-[18px] font-semibold text-slate-800">
+															{block.title}
+														</h2>
+													{/if}
+
+													<div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+														{#each block.items as item}
+															<a
+																href={item.href}
+																target={item.target}
+																rel={item.target === '_blank' ? 'noopener noreferrer' : undefined}
+																class={`inline-flex items-center justify-center rounded-[4px] px-5 py-3 text-[15px] font-medium transition ${
+																	item.variant === 'filled'
+																		? 'bg-[#2d9d3a] text-white hover:bg-[#248532]'
+																		: 'border border-[#2d9d3a] bg-white text-[#2d9d3a] hover:bg-[#f4fbf5]'
+																}`}
+															>
+																{item.label}
+															</a>
 														{/each}
 													</div>
 												</div>
@@ -326,157 +371,139 @@
 												<div class="space-y-6">
 													<div class="rounded-[6px] border border-[#dfe7df] bg-[#f8fbf8] p-4 shadow-sm sm:p-5">
 														<label
-															for="clinic-search"
+															for="clinic-region-select"
 															class="mb-3 block text-[14px] font-semibold uppercase tracking-[0.08em] text-[#4e8b41]"
 														>
-															Find a Clinic
+															Select a Clinic Location
 														</label>
 
-														<div class="relative">
-															<input
-																id="clinic-search"
-																bind:value={clinicSearch}
-																type="text"
-																placeholder={block.placeholder ?? 'Search by state or country...'}
-																class="w-full rounded-[4px] border border-slate-300 bg-white px-4 py-3 pr-12 text-[15px] text-slate-800 outline-none transition focus:border-[#2d9d3a] focus:ring-2 focus:ring-[#2d9d3a]/20 sm:text-[16px]"
-															/>
+														<select
+															id="clinic-region-select"
+															bind:value={selectedClinicRegionSlug}
+															class="w-full rounded-[4px] border border-slate-300 bg-white px-4 py-3 text-[15px] text-slate-800 outline-none transition focus:border-[#2d9d3a] focus:ring-2 focus:ring-[#2d9d3a]/20 sm:text-[16px]"
+														>
+															<option value="">Choose a state, territory, or country...</option>
 
-															{#if clinicSearch}
-																<button
-																	type="button"
-																	onclick={() => (clinicSearch = '')}
-																	class="absolute right-3 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full text-sm text-slate-500 transition hover:bg-slate-100 hover:text-slate-800"
-																	aria-label="Clear search"
-																>
-																	✕
-																</button>
-															{/if}
-														</div>
-
-														<p class="mt-3 text-[13px] leading-6 text-slate-500 sm:text-[14px]">
-															Start typing a U.S. state, territory, country, city, or clinic name.
-														</p>
+															{#each block.regions as region (region.slug)}
+																<option value={region.slug}>
+																	{region.region}
+																</option>
+															{/each}
+														</select>
 													</div>
 
 													<div class="rounded-[6px] border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
-														{#if !clinicSearch.trim()}
+														{#if !selectedClinicRegion}
 															<p class="text-center text-[16px] text-slate-500">
-																{block.initialMessage ?? 'Type a state or country to find clinics.'}
+																Choose a location from the dropdown to view clinics.
 															</p>
-														{:else if filteredClinicRegions.length > 0}
-															<div class="space-y-8">
-																{#each filteredClinicRegions as region (region.slug)}
-																	<section class="overflow-hidden rounded-[6px] border border-[#dfe7df] bg-white shadow-sm">
-																		<div class="border-b border-[#e7efe7] bg-[#f7fbf7] px-5 py-4 sm:px-6">
-																			<h2 class="text-[22px] font-light text-[#2d9d3a] sm:text-[28px]">
-																				{region.region}
-																			</h2>
-
-																			<p class="mt-1 text-[14px] text-slate-500">
-																				{region.clinics.length}
-																				{region.clinics.length === 1 ? ' clinic found' : ' clinics found'}
-																			</p>
-																		</div>
-
-																		<div class="grid grid-cols-1 gap-5 p-5 sm:p-6 md:grid-cols-2">
-																			{#each region.clinics as clinic, j (`${region.slug}-${clinic.name}-${clinic.city}-${j}`)}
-																				<article class="rounded-[6px] border border-slate-200 bg-[#fcfcfc] p-5 transition hover:border-[#cddccd] hover:shadow-md">
-																					<div class="space-y-4">
-																						<div>
-																							<h3 class="text-[18px] font-semibold leading-6 text-slate-900">
-																								{clinic.name}
-																							</h3>
-
-																							<div class="mt-2 inline-flex rounded-full bg-[#edf7eb] px-3 py-1 text-[13px] font-medium text-[#2d9d3a]">
-																								{clinic.city}
-																							</div>
-																						</div>
-
-																						{#if clinic.contact}
-																							<div class="text-[14px] leading-6 text-slate-700">
-																								<p class="font-semibold text-slate-800">Contact</p>
-																								<p>{clinic.contact}</p>
-																							</div>
-																						{/if}
-
-																						{#if clinic.addressLines?.length}
-																							<div class="text-[14px] leading-6 text-slate-700">
-																								<p class="font-semibold text-slate-800">Address</p>
-																								{#each clinic.addressLines as line, k (`addr-${k}`)}
-																									<p>{line}</p>
-																								{/each}
-																							</div>
-																						{/if}
-
-																						{#if clinic.phones?.length}
-																							<div class="text-[14px] leading-6 text-slate-700">
-																								<p class="font-semibold text-slate-800">Phone</p>
-
-																								<div class="space-y-1">
-																									{#each clinic.phones as phone, k (`phone-${k}`)}
-																										<p>
-																											<a
-																												href={`tel:${phone.replace(/[^+\d]/g, '')}`}
-																												class="text-[#496db2] transition hover:text-[#2f5597]"
-																											>
-																												{phone}
-																											</a>
-																										</p>
-																									{/each}
-																								</div>
-																							</div>
-																						{/if}
-
-																						{#if clinic.fax}
-																							<p class="text-[14px] leading-6 text-slate-700">
-																								<span class="font-semibold text-slate-800">Fax:</span>
-																								{clinic.fax}
-																							</p>
-																						{/if}
-
-																						{#if clinic.email}
-																							<p class="break-all text-[14px] leading-6 text-slate-700">
-																								<span class="font-semibold text-slate-800">Email:</span>
-																								<a
-																									href={`mailto:${clinic.email}`}
-																									class="ml-1 text-[#496db2] transition hover:text-[#2f5597]"
-																								>
-																									{clinic.email}
-																								</a>
-																							</p>
-																						{/if}
-
-																						{#if clinic.website}
-																							<p class="break-all text-[14px] leading-6 text-slate-700">
-																								<span class="font-semibold text-slate-800">Website:</span>
-																								<a
-																									href={clinic.website}
-																									target="_blank"
-																									rel="noreferrer"
-																									class="ml-1 text-[#496db2] transition hover:text-[#2f5597]"
-																								>
-																									{clinic.website}
-																								</a>
-																							</p>
-																						{/if}
-
-																						{#if clinic.country}
-																							<p class="text-[14px] leading-6 text-slate-700">
-																								<span class="font-semibold text-slate-800">Country:</span>
-																								{clinic.country}
-																							</p>
-																						{/if}
-																					</div>
-																				</article>
-																			{/each}
-																		</div>
-																	</section>
-																{/each}
-															</div>
 														{:else}
-															<p class="text-center text-[16px] text-slate-500">
-																{block.emptyMessage ?? 'No clinics matched your search.'}
-															</p>
+															<section class="overflow-hidden rounded-[6px] border border-[#dfe7df] bg-white shadow-sm">
+																<div class="border-b border-[#e7efe7] bg-[#f7fbf7] px-5 py-4 sm:px-6">
+																	<h2 class="text-[22px] font-light text-[#2d9d3a] sm:text-[28px]">
+																		{selectedClinicRegion.region}
+																	</h2>
+
+																	<p class="mt-1 text-[14px] text-slate-500">
+																		{selectedClinicRegion.clinics.length}
+																		{selectedClinicRegion.clinics.length === 1 ? ' clinic found' : ' clinics found'}
+																	</p>
+																</div>
+
+																<div class="grid grid-cols-1 gap-5 p-5 sm:p-6 md:grid-cols-2">
+																	{#each selectedClinicRegion.clinics as clinic, j (`${selectedClinicRegion.slug}-${clinic.name}-${clinic.city}-${j}`)}
+																		<article class="rounded-[6px] border border-slate-200 bg-[#fcfcfc] p-5 transition hover:border-[#cddccd] hover:shadow-md">
+																			<div class="space-y-4">
+																				<div>
+																					<h3 class="text-[18px] font-semibold leading-6 text-slate-900">
+																						{clinic.name}
+																					</h3>
+
+																					<div class="mt-2 inline-flex rounded-full bg-[#edf7eb] px-3 py-1 text-[13px] font-medium text-[#2d9d3a]">
+																						{clinic.city}
+																					</div>
+																				</div>
+
+																				{#if clinic.contact}
+																					<div class="text-[14px] leading-6 text-slate-700">
+																						<p class="font-semibold text-slate-800">Contact</p>
+																						<p>{clinic.contact}</p>
+																					</div>
+																				{/if}
+
+																				{#if clinic.addressLines?.length}
+																					<div class="text-[14px] leading-6 text-slate-700">
+																						<p class="font-semibold text-slate-800">Address</p>
+
+																						{#each clinic.addressLines as line, k (`addr-${k}`)}
+																							<p>{line}</p>
+																						{/each}
+																					</div>
+																				{/if}
+
+																				{#if clinic.phones?.length}
+																					<div class="text-[14px] leading-6 text-slate-700">
+																						<p class="font-semibold text-slate-800">Phone</p>
+
+																						<div class="space-y-1">
+																							{#each clinic.phones as phone, k (`phone-${k}`)}
+																								<p>
+																									<a
+																										href={`tel:${phone.replace(/[^+\d]/g, '')}`}
+																										class="text-[#496db2] transition hover:text-[#2f5597]"
+																									>
+																										{phone}
+																									</a>
+																								</p>
+																							{/each}
+																						</div>
+																					</div>
+																				{/if}
+
+																				{#if clinic.fax}
+																					<p class="text-[14px] leading-6 text-slate-700">
+																						<span class="font-semibold text-slate-800">Fax:</span>
+																						{clinic.fax}
+																					</p>
+																				{/if}
+
+																				{#if clinic.email}
+																					<p class="break-all text-[14px] leading-6 text-slate-700">
+																						<span class="font-semibold text-slate-800">Email:</span>
+																						<a
+																							href={`mailto:${clinic.email}`}
+																							class="ml-1 text-[#496db2] transition hover:text-[#2f5597]"
+																						>
+																							{clinic.email}
+																						</a>
+																					</p>
+																				{/if}
+
+																				{#if clinic.website}
+																					<p class="break-all text-[14px] leading-6 text-slate-700">
+																						<span class="font-semibold text-slate-800">Website:</span>
+																						<a
+																							href={clinic.website}
+																							target="_blank"
+																							rel="noreferrer"
+																							class="ml-1 text-[#496db2] transition hover:text-[#2f5597]"
+																						>
+																							{clinic.website}
+																						</a>
+																					</p>
+																				{/if}
+
+																				{#if clinic.country}
+																					<p class="text-[14px] leading-6 text-slate-700">
+																						<span class="font-semibold text-slate-800">Country:</span>
+																						{clinic.country}
+																					</p>
+																				{/if}
+																			</div>
+																		</article>
+																	{/each}
+																</div>
+															</section>
 														{/if}
 													</div>
 												</div>
@@ -485,7 +512,7 @@
 									</div>
 								</div>
 
-								{#if activeContent.id !== 'designs' && (activeContent.image || activeContent.images)}
+								{#if activeContent.id !== 'designs' && activeContent.id !== 'tummy-time' && (activeContent.image || activeContent.images)}
 									<div class="flex flex-col items-center gap-4 lg:items-end">
 										{#if activeContent.images}
 											{#each activeContent.images as img, i (`${activeContent.id}-image-${i}`)}
@@ -575,7 +602,7 @@
 
 			<div class="h-[calc(90vh-73px)] overflow-y-auto px-5 py-5">
 				<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-					{#each designOptions.slice(0, 24) as item, j (`design-modal-${j}`)}
+					{#each designOptions as item, j (`design-modal-${j}`)}
 						<button
 							type="button"
 							class="group text-left"
@@ -583,17 +610,14 @@
 							aria-label={`Open ${item.name}`}
 						>
 							<div class="aspect-square overflow-hidden rounded bg-white shadow-sm ring-1 ring-slate-200 transition group-hover:scale-[1.02] group-hover:shadow-md">
-								<img
-									src={item.images[0]}
-									alt={item.name}
-									class="h-full w-full object-cover"
-								/>
+								<img src={item.images[0]} alt={item.name} class="h-full w-full object-cover" />
 							</div>
 
 							<div class="mt-3">
 								<p class="text-[15px] font-semibold text-slate-800">
 									{item.name}
 								</p>
+
 								<p class="text-[14px] text-slate-700">
 									{item.code}
 								</p>

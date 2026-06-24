@@ -190,7 +190,7 @@ export const treatmentPageData: InfoPageData = {
 			label: 'Tummy Time',
 			icon: '☼',
 			title: 'Tummy Time',
-			image: '/images/treatment-tummy-time.png',
+			image: '/images/tummy01.jpg',
 			imageAlt: 'Baby during tummy time',
 			blocks: [
 				{

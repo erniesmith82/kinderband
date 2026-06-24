@@ -48,7 +48,7 @@ export const serviceCards: ServiceCard[] = [
 		description:
 			'A condition where an infant’s head is disproportionately wide.',
 		image: '/images/services2.jpg',
-		href: '/plagiocephaly/brachycephaly',
+		href: '/brachycephaly',
 		color: 'blue'
 	},
 	{
@@ -56,7 +56,7 @@ export const serviceCards: ServiceCard[] = [
 		description:
 			'Also known as dolichocephaly, it is a condition where the skull is disproportionately narrow and appears elongated.',
 		image: '/images/services3.jpg',
-		href: '/plagiocephaly/scaphocephaly',
+		href: '/scaphocephaly',
 		color: 'green'
 	},
 	{
@@ -64,7 +64,7 @@ export const serviceCards: ServiceCard[] = [
 		description:
 			'A condition where an infant has an imbalance in the neck muscles, causing the head to tilt to one side.',
 		image: '/images/services4.jpg',
-		href: '/treatment/torticollis',
+		href: '/torticollis',
 		color: 'purple'
 	}
 ];

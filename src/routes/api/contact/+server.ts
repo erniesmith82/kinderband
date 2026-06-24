@@ -29,6 +29,11 @@ export async function POST({ request }) {
 			);
 		}
 
+		const safeName = escapeHtml(name);
+		const safePhone = escapeHtml(phone);
+		const safeEmail = escapeHtml(email);
+		const safeMessage = escapeHtml(message || 'No message provided.').replaceAll('\n', '<br>');
+
 		await resend.emails.send({
 			from: CONTACT_FROM,
 			to: CONTACT_TO,
@@ -36,11 +41,40 @@ export async function POST({ request }) {
 			subject: `KinderBAND Contact Form - ${name}`,
 			html: `
 				<h2>New KinderBAND Contact Form Submission</h2>
-				<p><strong>Name:</strong> ${escapeHtml(name)}</p>
-				<p><strong>Phone:</strong> ${escapeHtml(phone)}</p>
-				<p><strong>Email:</strong> ${escapeHtml(email)}</p>
+				<p><strong>Name:</strong> ${safeName}</p>
+				<p><strong>Phone:</strong> ${safePhone}</p>
+				<p><strong>Email:</strong> ${safeEmail}</p>
 				<p><strong>Message:</strong></p>
-				<p>${escapeHtml(message || 'No message provided.').replaceAll('\n', '<br>')}</p>
+				<p>${safeMessage}</p>
+			`
+		});
+
+		await resend.emails.send({
+			from: CONTACT_FROM,
+			to: email,
+			subject: 'We received your KinderBAND message',
+			html: `
+				<h2>Thank you for contacting KinderBAND™</h2>
+
+				<p>Hello ${safeName},</p>
+
+				<p>
+					We received your message and someone from our team will contact you as soon as possible.
+				</p>
+
+				<p><strong>Your submitted information:</strong></p>
+
+				<p><strong>Name:</strong> ${safeName}</p>
+				<p><strong>Phone:</strong> ${safePhone}</p>
+				<p><strong>Email:</strong> ${safeEmail}</p>
+
+				<p><strong>Message:</strong></p>
+				<p>${safeMessage}</p>
+
+				<p>
+					Thank you,<br>
+					The KinderBAND™ Team
+				</p>
 			`
 		});
 

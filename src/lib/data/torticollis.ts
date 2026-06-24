@@ -19,7 +19,7 @@ export const torticollisPageData: InfoPageData = {
 			label: 'Torticollis',
 			icon: 'ⓘ',
 			title: 'Torticollis',
-			image: '/images/torticollis01.jpg',
+			image: '/images/torticollis00.jpg',
 			imageAlt: 'Infant with torticollis illustration',
 			blocks: [
 				{
@@ -45,7 +45,7 @@ export const torticollisPageData: InfoPageData = {
 			label: 'Symptoms',
 			icon: '◔',
 			title: 'Torticollis Symptoms',
-			image: '/images/torticollis-symptoms.jpg',
+			image: '/images/torticollis00.jpg',
 			imageAlt: 'Infant with head tilt',
 			blocks: [
 				{
@@ -80,7 +80,7 @@ export const torticollisPageData: InfoPageData = {
 			label: 'Causes',
 			icon: '⚕',
 			title: 'Torticollis Causes',
-			image: '/images/torticollis-causes.jpg',
+			image: '/images/torticollis00.jpg',
 			imageAlt: 'Infant neck muscle illustration',
 			blocks: [
 				{
@@ -106,7 +106,7 @@ export const torticollisPageData: InfoPageData = {
 			label: 'Treatment',
 			icon: '⌕',
 			title: 'Torticollis Treatment',
-			image: '/images/torticollis-treatment.jpg',
+			image: '/images/torticollis00.jpg',
 			imageAlt: 'Infant receiving therapy',
 			blocks: [
 				{

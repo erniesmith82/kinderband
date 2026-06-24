@@ -1,5 +1,3 @@
-import type { InfoPageData } from '$lib/components/InfoPageLayout.svelte';
-
 export const resourcesPageData: InfoPageData = {
 	pageTitle: 'Resources | kinderBAND™',
 
@@ -37,13 +35,13 @@ export const resourcesPageData: InfoPageData = {
 				},
 				{
 					type: 'link',
-					label: 'Torticollis Kids',
-					href: '#'
+					label: 'APTA Pediatric Torticollis Resources',
+					href: 'https://pediatricapta.org/clinical-practice-guidelines/Congenital-Muscular-Torticollis.cfm'
 				},
 				{
 					type: 'link',
-					label: 'National Infant Torticollis Association',
-					href: '#'
+					label: 'ChoosePT: Physical Therapy Guide to Torticollis',
+					href: 'https://www.choosept.com/guide/physical-therapy-guide-torticollis'
 				}
 			]
 		},
@@ -52,7 +50,7 @@ export const resourcesPageData: InfoPageData = {
 			id: 'plagiocephaly',
 			label: 'Plagiocephaly',
 			icon: '📄',
-			title: 'Resource for Parents of Children with Plagiocephaly',
+			title: 'Resources for Parents of Children with Plagiocephaly',
 			blocks: [
 				{
 					type: 'paragraph',
@@ -60,13 +58,13 @@ export const resourcesPageData: InfoPageData = {
 				},
 				{
 					type: 'link',
-					label: 'Plagiocephaly.org',
-					href: '#'
+					label: 'Johns Hopkins: Helmet Therapy for Your Baby',
+					href: 'https://www.hopkinsmedicine.org/health/treatment-tests-and-therapies/helmet-therapy-for-your-baby'
 				},
 				{
 					type: 'link',
-					label: 'Plagiocephaly.info',
-					href: '#'
+					label: 'Hanger Clinic: Cranial Helmet Questions',
+					href: 'https://hangerclinic.com/blog/for-patients/10-common-questions-before-starting-the-cranial-helmet-journey/'
 				}
 			]
 		},
@@ -83,8 +81,13 @@ export const resourcesPageData: InfoPageData = {
 				},
 				{
 					type: 'link',
-					label: 'Read More',
-					href: '#'
+					label: 'Safe to Sleep® Campaign',
+					href: 'https://safetosleep.nichd.nih.gov/'
+				},
+				{
+					type: 'link',
+					label: 'American Academy of Pediatrics Safe Sleep Toolkit',
+					href: 'https://www.aap.org/en/news-room/campaigns-and-toolkits/safe-sleep/'
 				}
 			]
 		},
@@ -101,8 +104,13 @@ export const resourcesPageData: InfoPageData = {
 				},
 				{
 					type: 'link',
-					label: 'Read More',
-					href: '#'
+					label: 'Nationwide Children’s: Tummy Time',
+					href: 'https://www.nationwidechildrens.org/family-resources-education/health-wellness-and-safety-resources/helping-hands/tummy-time'
+				},
+				{
+					type: 'link',
+					label: 'Nemours KidsHealth: Tummy Time',
+					href: 'https://kidshealth.org/en/parents/tummy-time.html'
 				}
 			]
 		}

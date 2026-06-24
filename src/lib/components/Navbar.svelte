@@ -20,14 +20,6 @@
 		{ key: 'torticollis', href: '/torticollis' }
 	] as const;
 
-	const navItems = [
-		{ key: 'about', href: '/about' },
-		{ key: 'treatment', href: '/treatment' },
-		{ key: 'technology', href: '/technology' },
-		{ key: 'clinics', href: '/clinics' },
-		{ key: 'questions', href: '/questions' }
-	] as const;
-
 	const text = $derived(t($currentLocale));
 
 	function handleLocaleChange(event: Event) {
@@ -109,6 +101,10 @@
 
 			<a href={resolve('/questions')} class="whitespace-nowrap transition hover:text-sky-700">
 				{text.nav.questions}
+			</a>
+
+			<a href={resolve('/contact')} class="whitespace-nowrap transition hover:text-sky-700">
+				{text.nav.contact ?? 'Contact'}
 			</a>
 
 			<select
@@ -230,6 +226,14 @@
 					onclick={closeMobileMenus}
 				>
 					{text.nav.questions}
+				</a>
+
+				<a
+					href={resolve('/contact')}
+					class="py-3 text-base font-medium text-slate-700 transition hover:text-sky-700"
+					onclick={closeMobileMenus}
+				>
+					{text.nav.contact ?? 'Contact'}
 				</a>
 			</div>
 		</div>

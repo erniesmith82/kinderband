@@ -41,7 +41,7 @@ export const plagiocephalyPageData: InfoPageData = {
 			label: 'Symptoms',
 			icon: '◔',
 			title: 'Plagiocephaly Symptoms',
-			image: '/images/plagiocephaly-symptoms.jpg',
+			image: '/images/plagiocephaly00.png',
 			imageAlt: 'Infant head-shape comparison',
 			blocks: [
 				{
@@ -74,7 +74,7 @@ export const plagiocephalyPageData: InfoPageData = {
 			label: 'Causes',
 			icon: '⚕',
 			title: 'Plagiocephaly Causes',
-			image: '/images/plagiocephaly-causes.jpg',
+			image: '/images/plagiocephaly00.png',
 			imageAlt: 'Infant resting on back',
 			blocks: [
 				{
@@ -112,7 +112,7 @@ export const plagiocephalyPageData: InfoPageData = {
 			label: 'Treatment',
 			icon: '⌕',
 			title: 'Plagiocephaly Treatment',
-			image: '/images/plagiocephaly-treatment.jpg',
+			image: '/images/plagiocephaly00.png',
 			imageAlt: 'Infant receiving cranial remolding treatment',
 			blocks: [
 				{

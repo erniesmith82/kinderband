@@ -20,7 +20,8 @@ export const translations = {
 			treatment: 'Treatment',
 			technology: 'Technology',
 			clinics: 'Clinics',
-			questions: 'Questions'
+			questions: 'Questions',
+			contact: 'Contact'
 		},
 		conditions: {
 			plagiocephaly: 'Plagiocephaly',
@@ -48,7 +49,8 @@ export const translations = {
 			treatment: 'Tratamiento',
 			technology: 'Tecnología',
 			clinics: 'Clínicas',
-			questions: 'Preguntas'
+			questions: 'Preguntas',
+			contact: 'Contacto'
 		},
 		conditions: {
 			plagiocephaly: 'Plagiocefalia',
@@ -76,7 +78,8 @@ export const translations = {
 			treatment: 'Tratamento',
 			technology: 'Tecnologia',
 			clinics: 'Clínicas',
-			questions: 'Perguntas'
+			questions: 'Perguntas',
+			contact: 'Contato'
 		},
 		conditions: {
 			plagiocephaly: 'Plagiocefalia',
@@ -104,7 +107,8 @@ export const translations = {
 			treatment: 'العلاج',
 			technology: 'التقنية',
 			clinics: 'العيادات',
-			questions: 'الأسئلة'
+			questions: 'الأسئلة',
+			contact: 'اتصل بنا'
 		},
 		conditions: {
 			plagiocephaly: 'تفلطح الرأس',
@@ -132,7 +136,8 @@ export const translations = {
 			treatment: 'Tretman',
 			technology: 'Teknoloji',
 			clinics: 'Klinik',
-			questions: 'Kesyon'
+			questions: 'Kesyon',
+			contact: 'Kontak'
 		},
 		conditions: {
 			plagiocephaly: 'Plajiosefali',
